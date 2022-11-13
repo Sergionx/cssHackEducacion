@@ -1,17 +1,22 @@
-import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Alert from "../../components/Alert";
 import IAlert from "../../interfaces/IAlert";
+import {auth, db} from "../../../firebase";
+import { User } from "../../interfaces/models/User";
+import { useAuth } from "../../context/authContext";
 
 function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repetirPassword, setRepetirPassword] = useState("");
+    const [profesor, setProfesor] = useState(false);
     const [alerta, setAlerta] = useState<IAlert>({ msg: "", error: false });
     
-    // const auth = getAuth();
+    const {signup} = useAuth();
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -39,26 +44,17 @@ function Register() {
         }
         // Creando el usuario en la API
         try {
-            // createUserWithEmailAndPassword(auth, email, password)
-            //     .then((userCredential) => {
-            //         const user = userCredential.user;
-            //         // ...
-            //     })
-            //     .catch((error) => {
-            //         const errorCode = error.code;
-            //         const errorMessage = error.message;
-            //         // ..
-            //     });
+            signup(name, email, password, profesor)
 
-            // const { data } = await axiosClient.post(`/users`, {
-            //     name,
-            //     email,
-            //     password,
-            // });
-            // setAlerta({
-            //     msg: data.msg,
-            //     error: false,
-            // });
+            setAlerta({
+                msg: "Se ha iniciado sesión, exitosamente",
+                error: false,
+            });
+
+            // Redireccionando al usuario a la página de inicio
+            setTimeout(() => {
+                navigate("/");
+            }, 3000);
 
         } catch (error: any) {
             console.log(error);
@@ -155,6 +151,21 @@ function Register() {
                         className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={repetirPassword}
                         onChange={(e) => setRepetirPassword(e.target.value)}
+                    />
+                </div>
+
+                <div className="my-5">
+                    <label
+                        htmlFor="professorOrStudent"
+                        className="uppercase text-gray-600 block text-xl font-bold"
+                    >
+                        Repetir contraseña
+                    </label>
+                    <input
+                        id="professorOrStudent"
+                        type="checkbox"
+                        checked={profesor}
+                        onChange={(e) => setProfesor(e.target.checked)}
                     />
                 </div>
 
