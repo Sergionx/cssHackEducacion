@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import IAlerta from "../../interfaces/IAlert";
 import Alert from "../../components/Alert";
 import { getAuth } from "@firebase/auth";
+import { useAuth } from "../../context/authContext";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [alerta, setAlerta] = useState<IAlerta>({ msg: "", error: false });
 
-    const auth = getAuth();
-
+    const {login} = useAuth();
     const navigate = useNavigate();
 
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
@@ -26,33 +26,25 @@ function Login() {
 
         // Logueando el usuario en la API
         try {
-            // const { data } = await axiosClient.post("/users/login", {
-            //     email,
-            //     password,
-            // });
+            try {
+                await login(email, password);
+                setAlerta({
+                    msg: "Logueado con exito",
+                    error: false,
+                });
+    
+                setEmail("");
+                setPassword("");            
+                
+                navigate("/"); 
+            } catch (error: any) {
+                setAlerta({
+                    msg: error.message,
+                    error: true,
+                });
+            }
 
-            // setAlerta({
-            //     msg: data.msg,
-            //     error: false,
-            // });
-
-            setEmail("");
-            setPassword("");
-
-            // localStorage.setItem("token", data.token); // TODO - Guardar el token como una cookie
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            // setAuth(data);
-            navigate("/shop"); //TODO - Redireccionar al home
-            // TODO - Penasar si el carrito del usuario será el que tenga guardado o el nuevo
         } catch (error: any) {
             console.log(error);
             setAlerta({

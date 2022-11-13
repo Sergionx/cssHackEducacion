@@ -9,7 +9,7 @@ import {
 import { auth, db } from "../../firebase";
 import { User } from "../interfaces/models/User";
 import { IAuthProvider } from "../interfaces/IAuthProvider";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 const authContext = createContext<IAuthProvider>({
     user: {
@@ -17,8 +17,12 @@ const authContext = createContext<IAuthProvider>({
         email: "",
         professor: false,
     },
-    signup: async (name:string, email: string, password: string, professor: boolean) => {
-    },
+    signup: async (
+        name: string,
+        email: string,
+        password: string,
+        professor: boolean
+    ) => {},
     login: async (email: string, password: string) => {
         return null;
     },
@@ -27,7 +31,7 @@ const authContext = createContext<IAuthProvider>({
     },
     resetPassword: async (email: string) => {
         return null;
-    }
+    },
 });
 
 export const useAuth = () => {
@@ -37,21 +41,29 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }: any) {
-    const [user, setUser] = useState<User | null >(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const signup = (name:string, email: string, password: string, professor: boolean) => {
-        return createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-            const user: User = {
-                name: name,
-                email: email,
-                professor: professor
-            }
-            addDoc(collection(db, "users"), user);
-        }).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
+    const signup = (
+        name: string,
+        email: string,
+        password: string,
+        professor: boolean
+    ) => {
+        return createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user: User = {
+                    name: name,
+                    email: email,
+                    professor: professor,
+                };
+                console.log('hola',userCredential.user.uid)
+                setDoc(doc(db, "users", userCredential.user.uid), user);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
     };
 
     const login = (email: string, password: string) => {
@@ -60,21 +72,32 @@ export function AuthProvider({ children }: any) {
 
     const logout = () => signOut(auth);
 
-    const resetPassword = async (email: string) => sendPasswordResetEmail(auth, email);
+    const resetPassword = async (email: string) =>
+        sendPasswordResetEmail(auth, email);
 
     useEffect(() => {
         const unsubuscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log({ currentUser });
-            // setUser(currentUser);
-            setLoading(false);
+            const id = currentUser?.uid == undefined ? "" : currentUser?.uid;
+            getDoc(doc(db, "users", id)).then((docSnap) => {
+                if (docSnap.exists()) {
+                    setUser(docSnap.data() as User);
+                    setLoading(false);
+
+                    console.log("Document data:", docSnap.data());
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            })
         });
         return () => unsubuscribe();
     }, []);
 
-    const value: IAuthProvider = { user, signup, login, logout, resetPassword }
+    const value: IAuthProvider = { user, signup, login, logout, resetPassword };
 
-
-    return (<authContext.Provider value={value}>{children}</authContext.Provider>);
+    return (
+        <authContext.Provider value={value}>{children}</authContext.Provider>
+    );
 }
 
 export default authContext;

@@ -159,7 +159,7 @@ function Register() {
                         htmlFor="professorOrStudent"
                         className="uppercase text-gray-600 block text-xl font-bold"
                     >
-                        Repetir contraseña
+                        Quieres ser un profesor?
                     </label>
                     <input
                         id="professorOrStudent"
