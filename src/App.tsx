@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Register from "./pages/user/Register";
+import Login from "./pages/user/Login";
+import Error404 from "./pages/Error404";
+import UserLayout from "./layouts/UserLayout";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/user" element={<UserLayout />}>
+                    <Route index element={<Login />} />
+                    <Route path="registrar" element={<Register />} />
+                    {/* <Route
+                        path="olvide-password"
+                        element={<ForgotPassword />}
+                    />
+                    <Route
+                        path="olvide-password/:token"
+                        element={<NewPassword />}
+                    />
+                    <Route path="confirmar/:id" element={<ConfirmAccount />} /> */}
+                    <Route path="*" element={<Error404 />} /> //TODO - Crear una
+                    pagina de error 404
+                </Route>
+
+                {/* <Route path="/cursos" element={<RutaProtegida />}>
+                    <Route index element={<Shop />} />
+                    <Route path="crear-producto" element={<NewProduct />} />
+                    <Route path=":id" element={<ProductDetails />} />
+                    <Route path="*" element={<Error404 />} /> //TODO - Crear una
+                    pagina de error 404
+                </Route> */}
+
+                <Route path="*" element={<Error404 />}></Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
-export default App
+export default App;
