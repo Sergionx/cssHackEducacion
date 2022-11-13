@@ -7,4 +7,5 @@ export interface IAuthProvider {
     login: (email: string, password: string) => Promise<UserCredential> | Promise<null>;
     logout: () => Promise<void> | Promise<null>; 
     resetPassword: (email: string) => Promise<void> | Promise<null>;
+    loading: boolean;
 }

@@ -32,6 +32,7 @@ const authContext = createContext<IAuthProvider>({
     resetPassword: async (email: string) => {
         return null;
     },
+    loading: true,
 });
 
 export const useAuth = () => {
@@ -93,7 +94,7 @@ export function AuthProvider({ children }: any) {
         return () => unsubuscribe();
     }, []);
 
-    const value: IAuthProvider = { user, signup, login, logout, resetPassword };
+    const value: IAuthProvider = { user, signup, login, logout, resetPassword, loading };
 
     return (
         <authContext.Provider value={value}>{children}</authContext.Provider>
