@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "../../components/Alert";
 import IAlert from "../../interfaces/IAlert";
-import {auth, db} from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import { User } from "../../interfaces/models/User";
 import { useAuth } from "../../context/authContext";
 
@@ -14,8 +14,8 @@ function Register() {
     const [repetirPassword, setRepetirPassword] = useState("");
     const [profesor, setProfesor] = useState(false);
     const [alerta, setAlerta] = useState<IAlert>({ msg: "", error: false });
-    
-    const {signup} = useAuth();
+
+    const { signup } = useAuth();
     const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,7 +44,7 @@ function Register() {
         }
         // Creando el usuario en la API
         try {
-            signup(name, email, password, profesor)
+            signup(name, email, password, profesor);
 
             setAlerta({
                 msg: "Se ha iniciado sesión, exitosamente",
@@ -54,8 +54,7 @@ function Register() {
             // Redireccionando al usuario a la página de inicio
             setTimeout(() => {
                 navigate("/");
-            }, 3000);
-
+            }, 1000);
         } catch (error: any) {
             console.log(error);
             setAlerta({
@@ -76,7 +75,7 @@ function Register() {
 
     return (
         <>
-            <h1 className="text-green-400 text-center font-black text-6xl capitalize">
+            <h1 className="text-blue-400 text-center font-black text-6xl capitalize">
                 Crea tu cuenta
             </h1>
 
@@ -97,7 +96,7 @@ function Register() {
                         id="name"
                         type="text"
                         placeholder="Ingrese su nombre"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -114,7 +113,7 @@ function Register() {
                         id="email"
                         type="email"
                         placeholder="Ingrese su email"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -131,7 +130,7 @@ function Register() {
                         id="password"
                         type="password"
                         placeholder="Ingrese su contraseña"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -148,7 +147,7 @@ function Register() {
                         id="password2"
                         type="password"
                         placeholder="Ingrese su contraseña otra vez"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={repetirPassword}
                         onChange={(e) => setRepetirPassword(e.target.value)}
                     />
@@ -172,25 +171,17 @@ function Register() {
                 <input
                     type="submit"
                     value="Crear cuenta"
-                    className="bg-green-500 w-full py-3 text-white font-bold uppercase rounded hover:cursos-pointer hover:cursor-pointer hover:bg-green-600 transition-colors mb-5"
+                    className="bg-blue-500 w-full py-3 text-white font-bold uppercase rounded hover:cursos-pointer hover:cursor-pointer hover:bg-blue-600 transition-colors mb-5"
                 />
             </form>
 
-            <nav className="lg:flex lg:justify-between">
+            <nav className="flex justify-center ">
                 <Link
                     className="block text-center my-5 text-slate-500 text-sm"
                     to="/user"
                 >
                     Ya tienes una cuenta?{" "}
-                    <span className="text-green-400">Inicia sesión</span>
-                </Link>
-
-                <Link
-                    className="block text-center my-5 text-slate-500 text-sm"
-                    to="/user/olvide-password"
-                >
-                    Olvidé mi contraseña{" "}
-                    <span className="text-green-400">Cambiar</span>
+                    <span className="text-blue-400">Inicia sesión</span>
                 </Link>
             </nav>
         </>

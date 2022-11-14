@@ -10,7 +10,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [alerta, setAlerta] = useState<IAlerta>({ msg: "", error: false });
 
-    const {login} = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
@@ -26,29 +26,22 @@ function Login() {
 
         // Logueando el usuario en la API
         try {
-            try {
-                await login(email, password);
-                setAlerta({
-                    msg: "Logueado con exito",
-                    error: false,
-                });
-    
-                setEmail("");
-                setPassword("");            
-                
-                navigate("/"); 
-            } catch (error: any) {
-                setAlerta({
-                    msg: error.message,
-                    error: true,
-                });
-            }
-
-            
-        } catch (error: any) {
-            console.log(error);
+            await login(email, password);
             setAlerta({
-                msg: error.response.data.msg,
+                msg: "Logueado con exito",
+                error: false,
+            });
+
+            setEmail("");
+            setPassword("");
+
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
+        } catch (error: any) {
+            console.log(error)
+            setAlerta({
+                msg: error.message,
                 error: true,
             });
         }
@@ -58,7 +51,7 @@ function Login() {
 
     return (
         <>
-            <h1 className="text-green-400 text-center font-black text-6xl capitalize">
+            <h1 className="text-blue-400 text-center font-black text-6xl capitalize">
                 Inicia sesión
             </h1>
 
@@ -79,7 +72,7 @@ function Login() {
                         id="email"
                         type="email"
                         placeholder="Ingrese su email"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -96,7 +89,7 @@ function Login() {
                         id="password"
                         type="password"
                         placeholder="Ingrese su contraseña"
-                        className="border-b-2 border-green-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                        className="border-b-2 border-blue-400 w-full mt-3 p-3 border rounded-xl bg-gray-50"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -105,26 +98,18 @@ function Login() {
                 <input
                     type="submit"
                     value="Iniciar Sesión"
-                    className="bg-green-500 w-full py-3 text-white font-bold uppercase rounded 
-          hover:cursos-pointer hover:cursor-pointer hover:bg-green-600 transition-colors mb-5"
+                    className="bg-blue-500 w-full py-3 text-white font-bold uppercase rounded 
+          hover:cursos-pointer hover:cursor-pointer hover:bg-blue-600 transition-colors mb-5"
                 />
             </form>
 
-            <nav className="lg:flex lg:justify-between">
+            <nav className="flex justify-center">
                 <Link
                     className="block text-center my-5 text-slate-500 text-sm"
                     to="/user/registrar"
                 >
                     No tienes una cuenta?{" "}
-                    <span className="text-green-400">Registrate</span>
-                </Link>
-
-                <Link
-                    className="block text-center my-5 text-slate-500 text-sm"
-                    to="/user/olvide-password"
-                >
-                    Olvidé mi contraseña{" "}
-                    <span className="text-green-400">Cambiar</span>
+                    <span className="text-blue-400">Registrate</span>
                 </Link>
             </nav>
         </>

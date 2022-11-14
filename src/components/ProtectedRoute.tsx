@@ -1,12 +1,20 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import Header from "./Header";
 
 export function ProtectedRoute({ children }: any) {
     const { user, loading } = useAuth();
 
-    if (loading) return <h1>Loading</h1>;
+    if (!user) return <Navigate to="/user" />;
 
-    if (!user) return <Navigate to="/login" />;
-
-    return <>{children}</>;
+    return (
+        <>
+            <div className="bg-blue-50">
+                <Header />
+                <div className="md:flex md:min-h">
+                    <main className="p-3 flex-1 ">{children}</main>
+                </div>
+            </div>
+        </>
+    );
 }

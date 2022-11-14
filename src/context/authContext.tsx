@@ -9,7 +9,7 @@ import {
 import { auth, db } from "../../firebase";
 import { User } from "../interfaces/models/User";
 import { IAuthProvider } from "../interfaces/IAuthProvider";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const authContext = createContext<IAuthProvider>({
     user: {
@@ -62,8 +62,7 @@ export function AuthProvider({ children }: any) {
                 setDoc(doc(db, "users", userCredential.user.uid), user);
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                console.log(error);
             });
     };
 

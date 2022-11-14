@@ -6,6 +6,7 @@ import Error404 from "./pages/Error404";
 import UserLayout from "./layouts/UserLayout";
 import { AuthProvider } from "./context/authContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import Hero from "./pages/hero/hero";
 
 function App() {
     return (
@@ -22,7 +23,7 @@ function App() {
                         path="/"
                         element={
                             <ProtectedRoute>
-                                <Error404 />
+                                <Hero />
                             </ProtectedRoute>
                         }
                     />
